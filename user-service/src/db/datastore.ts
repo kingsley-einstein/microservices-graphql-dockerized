@@ -1,4 +1,5 @@
 import { User } from "./model";
+import { CustomError } from "../_custom_/error";
 
 class DataStore {
   _store: User[] = [];
@@ -22,7 +23,11 @@ class DataStore {
   }
 
   async findById(id: number): Promise<User> {
-   return this._store.find((user) => user.id === id);
+   const user = this._store.find((user) => user.id === id);
+   if (!user) {
+    throw new CustomError(`User with id ${id} not found`, 404);
+   }
+   return user;
   }
 
   async findAll(): Promise<Array<User>> {
@@ -32,5 +37,63 @@ class DataStore {
   async findManyAndLimit(limit: number, page: number): Promise<Array<User>> {
    const users = this._store.slice((page - 1) * limit, (limit * page) - 1);
    return users;
+  }
+
+  async updateById(id: number, update: any): Promise<Array<number | User>> {
+   const user = this._store.find((u) => u.id === id);
+   if (!user) {
+    throw new CustomError(`User with id ${id} not found`, 404);
+   }
+   const index = this._store.indexOf(user);
+   Object.keys(update).forEach((key) => {
+    user[key] = update[key];
+   });
+   this._store.splice(index, 1, user);
+   return [1, user];
+  }
+
+  async updateWhere(where: any, update: any): Promise<Array<number | User>> {
+   const conditions = {};
+   Object.keys(where).forEach((key) => {
+    conditions[key] = where[key];
+   });
+   const matching: User[] = [];
+   this._store.forEach((u) => {
+    Object.keys(u).forEach((key) => {
+     Object.keys(conditions).forEach((key2) => {
+      if (u[key] === conditions[key2]) {
+       matching.concat([u]);
+      }
+     });
+    });
+   });
+   if (matching.length === 0) {
+    throw new CustomError("No matching user", 404);
+   }
+   const counts = {};
+   let compare = 0;
+   let matchingUser: User = null;
+   matching.forEach((u) => {
+    const _id = u.id;
+    if (!counts[_id]) {
+     counts[_id] = 1;
+    } else {
+     counts[_id] = counts[_id] + 1;
+    }
+    if (counts[_id] > compare) {
+     compare = counts[_id];
+     matchingUser = u;
+    }
+   });
+   return [1, matchingUser];
+  }
+
+  async deleteById(id: number): Promise<void> {
+   const user = this._store.find((u) => u.id === id);
+   if (!user) {
+    throw new CustomError("User with specified id not found", 404);
+   }
+   this._store = this._store.filter((u) => u.id !== user.id);
+   console.log("Deleted")
   }
 }
