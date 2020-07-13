@@ -1,7 +1,7 @@
 import { User } from "./model";
 import { CustomError } from "../_custom_/error";
 
-class DataStore {
+class Store {
   _store: User[] = [];
   _idStore: number[] = [0];
   _tokenStore: string[] = [
@@ -97,3 +97,6 @@ class DataStore {
    console.log("Deleted")
   }
 }
+
+export const DataStore = Store;
+export default Store;
