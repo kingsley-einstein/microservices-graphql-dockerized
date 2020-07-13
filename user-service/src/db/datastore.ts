@@ -61,7 +61,7 @@ class Store {
    this._store.forEach((u) => {
     Object.keys(u).forEach((key) => {
      Object.keys(conditions).forEach((key2) => {
-      if (u[key] === conditions[key2]) {
+      if (key === key2 && u[key] === conditions[key2]) {
        matching.concat([u]);
       }
      });
