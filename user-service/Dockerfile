@@ -7,4 +7,4 @@ COPY . .
 RUN npm install
 RUN npm run build
 EXPOSE ${PORT}
-ENTRYPOINT ["npm", "run", "local"]
+ENTRYPOINT ["npm", "run", "docker"]
