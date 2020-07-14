@@ -85,7 +85,14 @@ class Store {
      matchingUser = u;
     }
    });
-   return [1, matchingUser];
+   const index = this._store.indexOf(matchingUser);
+   Object.keys(update).forEach((key) => {
+    matchingUser[key] = update[key];
+   });
+   this._store.splice(index, 1, matchingUser);
+   return [
+    1, this._store.find((u) => u.id === matchingUser.id)
+   ];
   }
 
   async deleteById(id: number): Promise<void> {
