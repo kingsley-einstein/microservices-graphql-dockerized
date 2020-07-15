@@ -1,7 +1,5 @@
-import { DataStore } from "../db/datastore";
+import { store } from "../db/repository";
 import { CustomError } from "../_custom_/error";
-
-const store = new DataStore();
 
 export default async (req: any, res: any, next: any) => {
  try {

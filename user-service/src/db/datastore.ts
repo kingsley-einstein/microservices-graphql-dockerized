@@ -19,7 +19,8 @@ class Store {
     id, token, name, age, dob
    };
    this._idStore.push(id);
-   return this._store.concat([user]).find((u) => u.id === id);
+   this._store = this._store.concat([user]);
+   return this._store.find((u) => u.id === id);
   }
 
   async findById(id: number): Promise<User> {
@@ -35,7 +36,7 @@ class Store {
   }
 
   async findManyAndLimit(limit: number, page: number): Promise<Array<User>> {
-   const users = this._store.slice((page - 1) * limit, (limit * page) - 1);
+   const users = this._store.slice((page - 1) * limit, (limit * page));
    return users;
   }
 

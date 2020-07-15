@@ -1,6 +1,4 @@
-import Store from "../db/datastore";
-
-const store = new Store();
+import store from "../db/repository";
 
 class UserController {
  static async create(req: any, res: any) {
@@ -22,7 +20,7 @@ class UserController {
  static async findByID(req: any, res: any) {
   try {
    const { _id } = req.params;
-   const response = await store.findById(_id);
+   const response = await store.findById(parseInt(_id));
    res.status(200).json({
     code: 200,
     response
