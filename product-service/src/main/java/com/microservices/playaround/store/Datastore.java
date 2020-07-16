@@ -32,5 +32,31 @@ public class Datastore {
  }
 
  public List<Object> updateById(Integer id, Product p) {
+  Product product = null;
+  for (Product p2: products) {
+   if (p2.getId() == id) product = p2; 
+  }
+  if (p.getName() != null) {
+   product.setName(p.getName());
+  }
+  if (p.getDescription() != null) {
+   product.setDescription(p.getDescription());
+  }
+  for (Integer i = 0; i < products.size(); i++) {
+   if (products.get(i).getId() == product.getId()) {
+    products.add(i, product);
+   }
+  }
+  List<Object> returned = new ArrayList<>();
+  returned.add(0, 1);
+  returned.add(1, product);
+
+  return returned;
+ }
+
+ public void deleteById(Integer id) {
+  for (Product p: products) {
+   if (p.getId() == id) products.remove(p);
+  }
  }
 }
