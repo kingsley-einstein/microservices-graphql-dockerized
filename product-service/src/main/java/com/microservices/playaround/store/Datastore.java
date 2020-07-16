@@ -31,6 +31,10 @@ public class Datastore {
   return products;
  }
 
+ public List<Product> findAllAndLimit(Integer limit, Integer page) {
+  return products.subList((page - 1) * limit, limit * page);
+ }
+
  public List<Object> updateById(Integer id, Product p) {
   Product product = null;
   for (Product p2: products) {
