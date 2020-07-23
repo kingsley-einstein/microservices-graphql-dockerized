@@ -1,5 +1,6 @@
 package com.microservices.playaround.store.model;
 
+@SuppressWarnings("serial")
 public class Product implements java.io.Serializable {
  Integer id;
  String name;
