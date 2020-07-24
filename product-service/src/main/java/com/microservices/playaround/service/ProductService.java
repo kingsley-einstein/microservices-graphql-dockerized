@@ -42,6 +42,10 @@ public class ProductService {
   return store.findAll();
  }
 
+ public List<Product> findAllAndLimit(Integer page, Integer limit) {
+  return store.findAllAndLimit(limit, page);
+ }
+
  public List<Object> updateById(Integer id, Product product) {
   try {
    return store.updateById(id, product);

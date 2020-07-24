@@ -1,6 +1,7 @@
 package com.microservices.playaround.router;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.microservices.playaround.server.CustomErrorResponse;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -61,6 +63,36 @@ public class Router {
    );
   } catch (CustomErrorResponse error) {
    throw new CustomErrorResponse(error.getCode(), error.getMessage());
+  }
+ }
+
+ @GetMapping("/findall")
+ public ResponseEntity<CustomServerResponse<List<Product>>> getAll() {
+  try {
+   List<Product> products = service.findAll();
+   return new ResponseEntity<>(
+    new CustomServerResponse<List<Product>>(200, products),
+    HttpStatus.OK
+   );
+  } catch (CustomErrorResponse error) {
+   throw new CustomErrorResponse(error.getCode(), error.getMessage());
+  } catch (Exception error) {
+   throw new CustomErrorResponse(500, error.getMessage());
+  }
+ }
+
+ @GetMapping("/findwithlimit")
+ public ResponseEntity<CustomServerResponse<List<Product>>> getAllWithLimit(@RequestParam("page") Integer page, @RequestParam("limit") Integer limit) {
+  try {
+   List<Product> products = service.findAllAndLimit(page, limit);
+   return new ResponseEntity<>(
+    new CustomServerResponse<List<Product>>(200, products),
+    HttpStatus.OK
+   );
+  } catch (CustomErrorResponse error) {
+   throw new CustomErrorResponse(error.getCode(), error.getMessage());
+  } catch (Exception error) {
+   throw new CustomErrorResponse(500, error.getMessage());
   }
  }
 }
