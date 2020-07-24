@@ -1,0 +1,8 @@
+# Build folder
+build
+
+# Classpath
+.classpath
+
+.project
+HELP.md
