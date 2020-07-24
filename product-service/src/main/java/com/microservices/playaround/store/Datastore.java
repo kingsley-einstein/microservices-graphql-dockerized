@@ -1,5 +1,6 @@
 package com.microservices.playaround.store;
 
+import com.microservices.playaround.server.CustomErrorResponse;
 import com.microservices.playaround.store.model.Product;
 
 import java.util.ArrayList;
@@ -14,7 +15,8 @@ public class Datastore {
 
  public Product create(Product product) {
   boolean added = products.add(product);
-  return added ? products.get(products.indexOf(product)) : null;
+  if (!added) throw new CustomErrorResponse(500, "Unable to add product to store");
+  return products.get(products.indexOf(product));
  }
 
  public Product findById(Integer id) {
@@ -24,6 +26,9 @@ public class Datastore {
     product = p;
    }
   }
+  if (product == null) throw new CustomErrorResponse(
+   404, String.format("Product with id %d not found", id)
+  );
   return product;
  }
 
@@ -40,6 +45,9 @@ public class Datastore {
   for (Product p2: products) {
    if (p2.getId() == id) product = p2; 
   }
+  if (product == null) throw new CustomErrorResponse(
+   404, String.format("Product with id %d not found", id)
+  );
   if (p.getName() != null) {
    product.setName(p.getName());
   }
@@ -58,9 +66,18 @@ public class Datastore {
   return returned;
  }
 
- public void deleteById(Integer id) {
+ public String deleteById(Integer id) {
+  Product product = null;
   for (Product p: products) {
-   if (p.getId() == id) products.remove(p);
+   if (p.getId() == id) product = p;
   }
+  if (product == null) throw new CustomErrorResponse(
+   404, String.format("Product with id %d not found", id)
+  );
+  boolean removed = products.remove(product);
+  if (!removed) throw new CustomErrorResponse(
+   500, String.format("Unable to remove product with id %d ", id)
+  );
+  return "Successfully removed product with id " + id;
  }
 }
