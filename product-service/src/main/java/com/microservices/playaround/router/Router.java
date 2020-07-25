@@ -12,7 +12,9 @@ import com.microservices.playaround.store.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -93,6 +95,37 @@ public class Router {
    throw new CustomErrorResponse(error.getCode(), error.getMessage());
   } catch (Exception error) {
    throw new CustomErrorResponse(500, error.getMessage());
+  }
+ }
+
+ @PatchMapping("update/{id}")
+ public ResponseEntity<CustomServerResponse<List<Object>>> updateOne(@PathVariable("id") Integer id, @RequestBody Map<String, Object> body) {
+  try {
+   Product p = new Product();
+   if (body.get("name") != null) p.setName((String) body.get("name"));
+   if (body.get("description") != null) p.setDescription((String) body.get("description"));
+   List<Object> updated = service.updateById(id, p);
+   return new ResponseEntity<>(
+    new CustomServerResponse<List<Object>>(
+     200, updated
+    ),
+    HttpStatus.OK
+   );
+  } catch (CustomErrorResponse error) {
+   throw new CustomErrorResponse(error.getCode(), error.getMessage());
+  }
+ }
+
+ @DeleteMapping("delete/{id}")
+ public ResponseEntity<CustomServerResponse<String>> deleteOne(@PathVariable("id") Integer id) {
+  try {
+   String s = service.deleteById(id);
+   return new ResponseEntity<>(
+    new CustomServerResponse<String>(200, s),
+    HttpStatus.OK
+   );
+  } catch (CustomErrorResponse error) {
+   throw new CustomErrorResponse(error.getCode(), error.getMessage());
   }
  }
 }

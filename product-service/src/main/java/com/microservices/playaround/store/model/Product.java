@@ -7,6 +7,8 @@ public class Product implements java.io.Serializable {
  Integer owner;
  String description;
 
+ public Product() {}
+
  public Product(Integer id, String name, Integer owner, String description) {
   this.id = id;
   this.name = name;
