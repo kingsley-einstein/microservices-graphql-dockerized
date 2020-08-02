@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.microservices.playaround.client.Auth;
+import com.microservices.playaround.client.AuthClient;
 import com.microservices.playaround.server.CustomErrorResponse;
 import com.microservices.playaround.server.CustomServerResponse;
 import com.microservices.playaround.service.ProductService;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,6 +31,9 @@ public class Router {
  @Autowired
  private ProductService service;
 
+ @Autowired
+ private AuthClient client;
+
  @GetMapping
  public ResponseEntity<CustomServerResponse<String>> message() {
   return new ResponseEntity<>(
@@ -37,14 +43,16 @@ public class Router {
  }
 
  @PostMapping("/create")
- public ResponseEntity<CustomServerResponse<Product>> create(@RequestBody Map<String, Object> body) {
+ public ResponseEntity<CustomServerResponse<Product>> create(@RequestBody Map<String, Object> body, @RequestHeader("Authorization") String authorization) {
   try {
+   Auth auth = client.getLoggedUser(authorization).getBody().getResponse();
    Map<String, Object> map = new HashMap<>();
     body.keySet().forEach((key) -> {
      map.put(key, body.get(key));
     });
-   // I will remove comments when I integrate with Openfeign
-   // map.put("owner", ownerId);
+    
+   map.put("owner", auth.getId());
+
    Product product = service.create(map);
    return new ResponseEntity<>(
     new CustomServerResponse<Product>(201, product),
