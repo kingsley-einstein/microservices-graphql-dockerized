@@ -10,5 +10,5 @@ import org.springframework.web.bind.annotation.RequestHeader;
 @FeignClient(name = "auth-service", path = "/api/v1/auth")
 public interface AuthClient {
  @GetMapping("/logged")
- public ResponseEntity<CustomServerResponse<Auth>> getLoggedUser(@RequestHeader("Authorization") String authorization);
+ public ResponseEntity<CustomServerResponse<Auth>> getLoggedUser(@RequestHeader("token") String authorization);
 }

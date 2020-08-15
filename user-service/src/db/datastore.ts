@@ -58,12 +58,12 @@ class Store {
    Object.keys(where).forEach((key) => {
     conditions[key] = where[key];
    });
-   const matching: User[] = [];
+   let matching: User[] = [];
    this._store.forEach((u) => {
     Object.keys(u).forEach((key) => {
      Object.keys(conditions).forEach((key2) => {
       if (key === key2 && u[key] === conditions[key2]) {
-       matching.concat([u]);
+       matching = matching.concat([u]);
       }
      });
     });

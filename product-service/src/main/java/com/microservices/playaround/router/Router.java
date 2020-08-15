@@ -43,7 +43,7 @@ public class Router {
  }
 
  @PostMapping("/create")
- public ResponseEntity<CustomServerResponse<Product>> create(@RequestBody Map<String, Object> body, @RequestHeader("Authorization") String authorization) {
+ public ResponseEntity<CustomServerResponse<Product>> create(@RequestBody Map<String, Object> body, @RequestHeader("token") String authorization) {
   try {
    Auth auth = client.getLoggedUser(authorization).getBody().getResponse();
    Map<String, Object> map = new HashMap<>();
