@@ -7,7 +7,7 @@ const query = new GraphQLObjectType({
  fields: {
   findUserById: {
    type: UserType,
-   resolve: (source, { id }) => id,
+   resolve: (source, { id }) => UserResolvers.findById(id),
    args: {
     id: {
      type: GraphQLID
@@ -20,7 +20,7 @@ const query = new GraphQLObjectType({
   },
   findManyUsersWithLimit: {
    type: new GraphQLList(UserType),
-   resolve: (source, { limit, page }) => ({ limit, page }),
+   resolve: (source, { limit, page }) => UserResolvers.findAllWithLimit(limit, page),
    args: {
     limit: {
      type: GraphQLInt
@@ -43,6 +43,21 @@ const mutation = new GraphQLObjectType({
   createUser: {
    type: UserType,
    resolve: (source, args) => UserResolvers.register(args),
+   args: {
+    name: {
+     type: GraphQLString
+    },
+    age: {
+     type: GraphQLInt
+    },
+    dob: {
+     type: GraphQLString
+    }
+   }
+  },
+  update: {
+   type: UserType,
+   resolve: (source, args, context) => UserResolvers.updateById(context.headers, args),
    args: {
     name: {
      type: GraphQLString

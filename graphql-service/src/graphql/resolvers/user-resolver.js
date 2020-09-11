@@ -63,7 +63,7 @@ class UserResolvers {
 
  static async findLoggedUser(headers) {
   try {
-   const userResponse = await rp.get(BASE_URL + "/auth/get", {
+   const userResponse = await rp.get(BASE_URL + "/auth/logged", {
     ...rConfig,
     headers
    });
@@ -71,6 +71,44 @@ class UserResolvers {
    if (userResponse.statusCode >= 400)
     throw new DefaultError(userResponse.statusCode, userResponse.body.response);
 
+   return Promise.resolve(userResponse.body.response);
+  } catch (error) {
+   return Promise.reject({
+    code: error.c || 500,
+    response: error.message
+   });
+  }
+ }
+
+ static async findAllWithLimit(limit, page) {
+  try {
+   const userResponse = await rp.get(BASE_URL + `/auth/many/limited?limit=${limit}&page=${page}`, {
+    ...rConfig
+   });
+
+   if (userResponse.statusCode >= 400)
+    throw new DefaultError(userResponse.statusCode, userResponse.body.response);
+   
+   return Promise.resolve(userResponse.body.response);
+  } catch (error) {
+   return Promise.reject({
+    code: error.c || 500,
+    response: error.message
+   });
+  }
+ }
+
+ static async updateById(headers, body) {
+  try {
+   const userResponse = await rp.patch(BASE_URL + "/auth/update/byId", {
+    ...rConfig,
+    headers,
+    body
+   });
+
+   if (userResponse.statusCode >= 400)
+    throw new DefaultError(userResponse.statusCode, userResponse.body.response);
+   
    return Promise.resolve(userResponse.body.response);
   } catch (error) {
    return Promise.reject({

@@ -2,11 +2,11 @@ const config = {
  ZUUL_GATEWAY_URL: "http://localhost:9778",
  SERVICES: {
   USER_SERVICE: {
-   name: "user-service",
+   name: "/auth-service",
    basePath: "/api/v1"
   },
   PRODUCT_SERVICE: {
-   name: "product-service",
+   name: "/product-service",
    basePath: "/api/v1"
   }
  }
