@@ -1,5 +1,6 @@
 const { GraphQLObjectType, GraphQLSchema, GraphQLList, GraphQLID, GraphQLNonNull, GraphQLInt, GraphQLString } = require("graphql");
 const { UserType, ProductType } = require("../types");
+const { UserResolvers } = require("../resolvers");
 
 const query = new GraphQLObjectType({
  name: "Query",
@@ -37,7 +38,7 @@ const mutation = new GraphQLObjectType({
  fields: {
   createUser: {
    type: UserType,
-   resolve: (source, args) => source,
+   resolve: (source, args) => UserResolvers.register(args),
    args: {
     name: {
      type: GraphQLString
