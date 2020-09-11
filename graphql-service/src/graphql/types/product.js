@@ -1,5 +1,6 @@
 const { GraphQLString, GraphQLID, GraphQLObjectType, GraphQLNonNull } = require("graphql");
 const UserType = require("./user");
+const { UserResolvers } = require("../resolvers");
 
 module.exports = new GraphQLObjectType({
  name: "Product",
@@ -15,7 +16,7 @@ module.exports = new GraphQLObjectType({
   },
   owner: {
    type: new GraphQLNonNull(UserType),
-   resolve: (source) => source.owner
+   resolve: (source) => UserResolvers.findById(source.owner)
   }
  }
 });

@@ -16,7 +16,7 @@ const query = new GraphQLObjectType({
   },
   findAllUsers: {
    type: new GraphQLList(UserType),
-   resolve: (source) => source
+   resolve: () => UserResolvers.findAll()
   },
   findManyUsersWithLimit: {
    type: new GraphQLList(UserType),
@@ -29,6 +29,10 @@ const query = new GraphQLObjectType({
      type: GraphQLInt
     }
    }
+  },
+  getLoggedUser: {
+   type: UserType,
+   resolve: (source, args, context) => UserResolvers.findLoggedUser(context.headers)
   }
  }
 });
