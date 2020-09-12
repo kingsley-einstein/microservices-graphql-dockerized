@@ -66,9 +66,13 @@ const eureka = new Eureka({
 
 app.listen(port, () => {
  console.log("Server running on " + port);
- eureka.start((err) => {
-  if (err)
-   throw err;
-  console.log("Instance has been registered.")
- })
+ if (process.env.NODE_ENV !== "test") {
+  eureka.start((err) => {
+   if (err)
+    throw err;
+   console.log("Instance has been registered.")
+  });
+ }
 });
+
+export default app;
