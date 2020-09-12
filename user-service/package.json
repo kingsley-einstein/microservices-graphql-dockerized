@@ -7,8 +7,6 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rimraf build",
     "build": "npm run clean && tsc -p .",
-    "local": "npm run build && node build/index",
-    "docker": "node build/index",
     "start": "npm run build && node build/index"
   },
   "keywords": [],
