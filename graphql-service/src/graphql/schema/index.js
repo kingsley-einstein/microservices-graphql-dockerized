@@ -1,6 +1,6 @@
 const { GraphQLObjectType, GraphQLSchema, GraphQLList, GraphQLID, GraphQLNonNull, GraphQLInt, GraphQLString } = require("graphql");
 const { UserType, ProductType } = require("../types");
-const { UserResolvers } = require("../resolvers");
+const { UserResolvers, ProductResolvers } = require("../resolvers");
 
 const query = new GraphQLObjectType({
  name: "Query",
@@ -55,7 +55,7 @@ const mutation = new GraphQLObjectType({
     }
    }
   },
-  update: {
+  updateUser: {
    type: UserType,
    resolve: (source, args, context) => UserResolvers.updateById(context.headers, args),
    args: {
@@ -66,6 +66,18 @@ const mutation = new GraphQLObjectType({
      type: GraphQLInt
     },
     dob: {
+     type: GraphQLString
+    }
+   }
+  },
+  createProduct: {
+   type: ProductType,
+   resolve: (source, args, context) => ProductResolvers.create(args, context.headers),
+   args: {
+    name: {
+     type: new GraphQLNonNull(GraphQLString)
+    },
+    description: {
      type: GraphQLString
     }
    }

@@ -22,10 +22,14 @@ class UserResolvers {
    
    return Promise.resolve(userResponse.body.response);
   } catch (error) {
-   return Promise.reject({
-    code: error.c || 500,
-    response: error.message
-   });
+   return Promise.reject(
+    new Error(
+     JSON.stringify({
+      code: error.c || 500,
+      response: error.message
+     })
+    )
+   );
   }
  }
 
@@ -38,10 +42,14 @@ class UserResolvers {
    
    return Promise.resolve(userResponse.body.response);
   } catch (error) {
-   return Promise.reject({
-    code: error.c || 500,
-    response: error.message
-   });
+   return Promise.reject(
+    new Error(
+     JSON.stringify({
+      code: error.c || 500,
+      response: error.message
+     })
+    )
+   );
   }
  }
 
@@ -54,10 +62,14 @@ class UserResolvers {
    
    return Promise.resolve(userResponse.body.response);
   } catch (error) {
-   return Promise.reject({
-    code: error.c || 500,
-    response: error.message
-   });
+   return Promise.reject(
+    new Error(
+     JSON.stringify({
+      code: error.c || 500,
+      response: error.message
+     })
+    )
+   );
   }
  }
 
@@ -73,10 +85,14 @@ class UserResolvers {
 
    return Promise.resolve(userResponse.body.response);
   } catch (error) {
-   return Promise.reject({
-    code: error.c || 500,
-    response: error.message
-   });
+   return Promise.reject(
+    new Error(
+     JSON.stringify({
+      code: error.c || 500,
+      response: error.message
+     })
+    )
+   );
   }
  }
 
@@ -91,10 +107,14 @@ class UserResolvers {
    
    return Promise.resolve(userResponse.body.response);
   } catch (error) {
-   return Promise.reject({
-    code: error.c || 500,
-    response: error.message
-   });
+   return Promise.reject(
+    new Error(
+     JSON.stringify({
+      code: error.c || 500,
+      response: error.message
+     })
+    )
+   );
   }
  }
 
@@ -106,15 +126,21 @@ class UserResolvers {
     body
    });
 
+   // console.log(headers);
+
    if (userResponse.statusCode >= 400)
     throw new DefaultError(userResponse.statusCode, userResponse.body.response);
    
-   return Promise.resolve(userResponse.body.response);
+   return Promise.resolve(userResponse.body.response[1]);
   } catch (error) {
-   return Promise.reject({
-    code: error.c || 500,
-    response: error.message
-   });
+   return Promise.reject(
+    new Error(
+     JSON.stringify({
+      code: error.c || 500,
+      response: error.message
+     })
+    )
+   );
   }
  }
 }
