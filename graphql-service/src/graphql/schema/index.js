@@ -33,6 +33,19 @@ const query = new GraphQLObjectType({
   getLoggedUser: {
    type: UserType,
    resolve: (source, args, context) => UserResolvers.findLoggedUser(context.headers)
+  },
+  findProducts: {
+   type: new GraphQLList(ProductType),
+   resolve: () => ProductResolvers.findAllProducts()
+  },
+  findProductById: {
+   type: ProductType,
+   resolve: (source, args) => ProductResolvers.findProductById(args.id),
+   args: {
+    id: {
+     type: GraphQLID
+    }
+   }
   }
  }
 });

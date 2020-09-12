@@ -1,6 +1,7 @@
 const rp = require("request-promise");
 const conf = require("../config");
 const { DefaultError } = require("../../custom");
+const product = require("../types/product");
 
 const BASE_URL = conf.ZUUL_GATEWAY_URL + conf.SERVICES.PRODUCT_SERVICE.name + conf.SERVICES.PRODUCT_SERVICE.basePath;
 const rConfig = {
@@ -17,6 +18,46 @@ class ProductResolvers {
     body,
     headers
    });
+
+   if (productResponse.statusCode >= 400)
+    throw new DefaultError(productResponse.statusCode, productResponse.body.response);
+
+   return Promise.resolve(productResponse.body.response);
+  } catch (error) {
+   return Promise.reject(
+    new Error(
+     JSON.stringify({
+      code: error.c || 500,
+      response: error.message
+     })
+    )
+   );
+  }
+ }
+
+ static async findAllProducts() {
+  try {
+   const productResponse = await rp.get(BASE_URL + "/findall", { ...rConfig });
+
+   if (productResponse.statusCode >= 400)
+    throw new DefaultError(productResponse.statusCode, productResponse.body.response);
+   
+   return Promise.resolve(productResponse.body.response);
+  } catch (error) {
+   return Promise.reject(
+    new Error(
+     JSON.stringify({
+      code: error.c || 500,
+      response: error.message
+     })
+    )
+   );
+  }
+ }
+
+ static async findProductById(id) {
+  try {
+   const productResponse = await rp.get(BASE_URL + "/find/" + id, { ...rConfig });
 
    if (productResponse.statusCode >= 400)
     throw new DefaultError(productResponse.statusCode, productResponse.body.response);
